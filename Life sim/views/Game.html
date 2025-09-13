@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modern Life Simulator - Game</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #6c3483;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+
+  h1, h2 { text-align: center; }
+
+  .avatar-selection, .game-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .avatar-options {
+    display: flex;
+    gap: 30px;
+    margin-top: 10px;
+  }
+
+  .avatar-options img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid #fff;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+
+  .avatar-options img:hover {
+    transform: scale(1.1);
+    border-color: #ffc371;
+  }
+
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 20px;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .stat span {
+    font-size: 1.2rem;
+    margin-top: 5px;
+  }
+
+  .stat-bar {
+    width: 120px;
+    height: 15px;
+    background-color: #fff;
+    border-radius: 10px;
+    margin-top: 5px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg,#ff5f6d,#ffc371);
+    width: 0%;
+    transition: width 0.5s;
+  }
+
+  .actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .actions button {
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(90deg,#ff5f6d,#ffc371);
+    animation: glow 2s infinite alternate;
+    transition: transform 0.3s;
+  }
+
+  .actions button:hover {
+    transform: scale(1.1);
+  }
+
+  @keyframes glow {
+    0% { box-shadow: 0 0 5px #ff5f6d,0 0 10px #ffc371; }
+    50% { box-shadow: 0 0 15px #ff5f6d,0 0 25px #ffc371; }
+    100% { box-shadow: 0 0 5px #ff5f6d,0 0 10px #ffc371; }
+  }
+
+  .log {
+    margin-top: 20px;
+    max-width: 700px;
+    text-align: center;
+    background: rgba(255,255,255,0.1);
+    padding: 15px;
+    border-radius: 15px;
+    min-height: 50px;
+  }
+
+</style>
+</head>
+<body>
+
+<h1>Modern Life Simulation</h1>
+<h2>Select Your Gender</h2>
+
+<div class="avatar-selection">
+  <div class="avatar-options">
+    <img src="C:/Users/DELL/Documents/Life sim/images/female.png" id="femaleAvatar" alt="Female Avatar">
+    <img src="C:/Users/DELL/Documents/Life sim/images/male.png" id="maleAvatar" alt="Male Avatar">
+  </div>
+</div>
+
+<div class="game-container" style="display:none;">
+  <h2>Your Stats</h2>
+  <div class="stats">
+    <div class="stat">
+      💰 Money
+      <div class="stat-bar"><div id="moneyBar" class="bar-fill"></div></div>
+      <span id="moneyText">$0</span>
+    </div>
+    <div class="stat">
+      ❤️ Health
+      <div class="stat-bar"><div id="healthBar" class="bar-fill"></div></div>
+      <span id="healthText">100</span>
+    </div>
+    <div class="stat">
+      🛠️ Skills
+      <div class="stat-bar"><div id="skillsBar" class="bar-fill"></div></div>
+      <span id="skillsText">0</span>
+    </div>
+    <div class="stat">
+      🧠 Intellect
+      <div class="stat-bar"><div id="intellectBar" class="bar-fill"></div></div>
+      <span id="intellectText">0</span>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button id="workBtn">Work</button>
+    <button id="eatBtn">Eat</button>
+    <button id="studyBtn">Study</button>
+    <button id="trainBtn">Train</button>
+    <button id="liveBtn">Live → Next Year</button>
+  </div>
+
+  <div class="log" id="log">Your journey begins...</div>
+</div>
+
+<script>
+let stats = {
+  money: 100,
+  health: 100,
+  skills: 0,
+  intellect: 0
+};
+
+let selectedAvatar = null;
+
+// Update stats display
+function updateStats(){
+  document.getElementById('moneyText').textContent = '$' + stats.money;
+  document.getElementById('healthText').textContent = stats.health;
+  document.getElementById('skillsText').textContent = stats.skills;
+  document.getElementById('intellectText').textContent = stats.intellect;
+
+  document.getElementById('moneyBar').style.width = Math.min(stats.money, 100) + '%';
+  document.getElementById('healthBar').style.width = Math.min(stats.health, 100) + '%';
+  document.getElementById('skillsBar').style.width = Math.min(stats.skills, 100) + '%';
+  document.getElementById('intellectBar').style.width = Math.min(stats.intellect, 100) + '%';
+}
+
+// Random events
+function randomEvent(){
+  const events = [
+    {text:"You worked overtime! Earned $50 but lost 10 health.", money:50, health:-10},
+    {text:"You ate junk food. Health decreased by 15.", health:-15},
+    {text:"You studied hard! Intellect increased by 10.", intellect:10},
+    {text:"Vocational training! Skills increased by 15.", skills:15},
+    {text:"Bad decision! Intellect decreased by 5.", intellect:-5},
+    {text:"Unexpected expense! Lost $20.", money:-20}
+  ];
+
+  const event = events[Math.floor(Math.random()*events.length)];
+
+  stats.money = Math.max(stats.money + (event.money || 0),0);
+  stats.health = Math.max(Math.min(stats.health + (event.health || 0),100),0);
+  stats.skills = Math.max(stats.skills + (event.skills || 0),0);
+  stats.intellect = Math.max(stats.intellect + (event.intellect || 0),0);
+
+  document.getElementById('log').textContent = event.text;
+  updateStats();
+}
+
+// Gender selection
+document.getElementById('femaleAvatar').addEventListener('click', ()=>{
+  selectedAvatar = 'female';
+  document.querySelector('.avatar-selection').style.display = 'none';
+  document.querySelector('.game-container').style.display = 'flex';
+});
+
+document.getElementById('maleAvatar').addEventListener('click', ()=>{
+  selectedAvatar = 'male';
+  document.querySelector('.avatar-selection').style.display = 'none';
+  document.querySelector('.game-container').style.display = 'flex';
+});
+
+// Action buttons
+document.getElementById('workBtn').addEventListener('click', ()=>{
+  stats.money += 50;
+  stats.health -= 10;
+  document.getElementById('log').textContent = "You worked hard! +$50, -10 health.";
+  updateStats();
+});
+
+document.getElementById('eatBtn').addEventListener('click', ()=>{
+  stats.health = Math.min(stats.health + 15,100);
+  stats.money -= 10;
+  document.getElementById('log').textContent = "You ate a meal! +15 health, -$10.";
+  updateStats();
+});
+
+document.getElementById('studyBtn').addEventListener('click', ()=>{
+  stats.intellect += 10;
+  stats.health -= 5;
+  document.getElementById('log').textContent = "You studied! +10 intellect, -5 health.";
+  updateStats();
+});
+
+document.getElementById('trainBtn').addEventListener('click', ()=>{
+  stats.skills += 15;
+  stats.health -= 5;
+  document.getElementById('log').textContent = "You trained! +15 skills, -5 health.";
+  updateStats();
+});
+
+document.getElementById('liveBtn').addEventListener('click', ()=>{
+  randomEvent();
+});
+
+updateStats();
+</script>
+
+</body>
+</html>

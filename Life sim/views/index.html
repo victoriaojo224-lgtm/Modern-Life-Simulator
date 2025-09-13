@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern Life Simulation</title>
+  <link rel="icon" href="C:/Users/DELL/Documents/Life sim/images/Logo.png" type="image/png">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      background-color: #8e44ad;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    #particleCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .top-nav {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 50px;
+      padding: 20px 0;
+      z-index: 2;
+    }
+
+    .top-nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.2rem;
+      transition: 0.3s;
+      animation: hopGlow 1.5s infinite alternate;
+    }
+
+    @keyframes hopGlow {
+      0% { transform: translateY(0); text-shadow: 0 0 5px #ff5f6d, 0 0 10px #ffc371; }
+      50% { transform: translateY(-6px); text-shadow: 0 0 15px #ff5f6d, 0 0 25px #ffc371; }
+      100% { transform: translateY(0); text-shadow: 0 0 5px #ff5f6d, 0 0 10px #ffc371; }
+    }
+
+    .logo {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      width: 180px;
+      height: auto;
+      z-index: 2;
+    }
+
+    .main-section {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 120px 20px 50px 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cutout-image {
+      flex: 1;
+      min-width: 250px;
+      max-width: 400px;
+      margin-left: -70px;
+      animation: float 4s ease-in-out infinite;
+      position: relative;
+    }
+
+    .cutout-image img {
+      width: 100%;
+      border-radius: 0;
+      transition: transform 0.3s;
+    }
+
+    .cutout-image img:hover {
+      transform: scale(1.03);
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .content {
+      flex: 2;
+      min-width: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 1;
+    }
+
+    .content h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .content h2 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .content button {
+      padding: 15px 40px;
+      font-size: 1.5rem;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      background: linear-gradient(90deg,#ff5f6d,#ffc371);
+      color: #fff;
+      font-weight: bold;
+      transition: 0.3s;
+      animation: glow 2s infinite alternate;
+    }
+
+    .content button:hover {
+      transform: scale(1.1);
+    }
+
+    @keyframes glow {
+      0% { box-shadow: 0 0 5px #ff5f6d, 0 0 10px #ffc371, 0 0 15px #ff5f6d; }
+      50% { box-shadow: 0 0 15px #ff5f6d, 0 0 30px #ffc371, 0 0 45px #ff5f6d; }
+      100% { box-shadow: 0 0 5px #ff5f6d, 0 0 10px #ffc371, 0 0 15px #ff5f6d; }
+    }
+
+    .about-game {
+      max-width: 900px;
+      margin: 50px auto;
+      padding: 30px;
+      text-align: center;
+      background: rgba(0,0,0,0.2);
+      border-radius: 20px;
+      line-height: 1.8;
+      position: relative;
+      z-index: 1;
+    }
+
+    .about-game h2 {
+      margin-bottom: 20px;
+      font-size: 2rem;
+    }
+
+    .quote {
+      font-style: italic;
+      color: #f9f9f9;
+      margin-top: 15px;
+      font-size: 1.1rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #6c3483;
+      font-size: 0.9rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 768px){
+      .main-section {
+        flex-direction: column;
+      }
+      .cutout-image {
+        margin-left: 0;
+        margin-top: 20px;
+      }
+      .top-nav {
+        left: 50%;
+        transform: translateX(-50%);
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="particleCanvas"></canvas>
+
+<img src="C:/Users/DELL/Documents/Life sim/images/Logo.png" class="logo" alt="Logo">
+
+<div class="top-nav">
+  <a href="index.html">Homepage</a>
+  <a href="gamepage.html">Gamepage</a>
+</div>
+
+<div class="main-section">
+  <div class="content">
+    <h1>Welcome</h1>
+    <h2>Modern Life Simulation</h2>
+    <button id="playBtn">Play Now!</button>
+  </div>
+  <div class="cutout-image">
+    <img src="C:/Users/DELL/Documents/Life sim/images/Welcome.png" alt="Welcome Overlay">
+  </div>
+</div>
+
+<div class="about-game">
+  <h2>About the Game</h2>
+  <p>
+    Modern Life Simulation immerses you in a vibrant, interactive world where every decision matters. Balance career, relationships, hobbies, and personal growth. Dynamic daily events react to your choices, keeping the experience fresh and exciting. Explore opportunities, develop skills, and manage resources wisely. Meet a diverse cast of characters, form meaningful friendships, and experience the impact of your decisions. Each playthrough offers unique scenarios and surprises. Customize your character, pursue achievements, and unlock secrets hidden throughout the simulation. Life is a journey — strategize, explore, and thrive in this virtual world that mirrors the excitement and unpredictability of real life. Random events may challenge you, while rewards and milestones celebrate your progress. From career growth to social adventures, every choice shapes your story. Experience the balance between fun, strategy, and realism in every session.
+  </p>
+  <p class="quote">"Life is what you make it. Make it extraordinary!"</p>
+  <p>
+    Participate in challenges, explore hobbies, and grow your skills. Build relationships, manage time, and enjoy a world full of possibilities. Each decision unlocks new paths and adventures. Embrace the journey and let your story unfold.
+  </p>
+  <p class="quote">"Success is a journey, not a destination." – Zig Ziglar</p>
+</div>
+
+<footer>
+  &copy; 2025 Modern Life Simulation. All rights reserved.
+</footer>
+
+<script>
+const playBtn = document.getElementById('playBtn');
+
+playBtn.addEventListener('click', ()=>{
+  window.location.href = "gamepage.html"; // Redirect to the actual game page
+});
+
+// Particle effect
+const canvas = document.getElementById('particleCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+const particlesArray=[];
+const colors=['rgba(255,255,255,0.5)','rgba(255,255,255,0.3)','rgba(255,255,255,0.2)'];
+class Particle{
+  constructor(){
+    this.x=Math.random()*canvas.width;
+    this.y=Math.random()*canvas.height;
+    this.size=Math.random()*3+1;
+    this.speedX=(Math.random()-0.5)*0.5;
+    this.speedY=(Math.random()-0.5)*0.5;
+    this.color=colors[Math.floor(Math.random()*colors.length)];
+  }
+  update(){
+    this.x+=this.speedX;
+    this.y+=this.speedY;
+    if(this.x<0||this.x>canvas.width) this.speedX*=-1;
+    if(this.y<0||this.y>canvas.height) this.speedY*=-1;
+  }
+  draw(){
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+    ctx.fillStyle=this.color;
+    ctx.fill();
+  }
+}
+function initParticles(){for(let i=0;i<150;i++){particlesArray.push(new Particle());}}
+function animateParticles(){ctx.clearRect(0,0,canvas.width,canvas.height);particlesArray.forEach(p=>{p.update();p.draw();});requestAnimationFrame(animateParticles);}
+initParticles();
+animateParticles();
+
+window.addEventListener('resize',()=>{
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
+</body>
+</html>
+
